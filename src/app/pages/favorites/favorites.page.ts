@@ -1,46 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { RouterLink } from '@angular/router';
-import { FavoritesService } from 'src/app/services/favorites.service.ts';
-import { SettingsService } from 'src/app/services/settings.service.ts';
-import { DigimonCard } from 'src/app/models/digimon-card.model.ts';
+import { Router } from '@angular/router';
+import { FavoritesService } from '../../services/favorites.service.ts';
+import { SettingsService } from '../../services/settings.service.ts';
+import { DigimonCard } from '../../models/digimon-card.model.ts';
+import { IonRow, IonHeader, IonCardHeader } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.page.html',
-  styleUrls: ['./favorites.page.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, RouterLink]
+  styleUrls: ['./favorites.page.scss']
 })
 export class FavoritesPage implements OnInit {
   favorites: DigimonCard[] = [];
-  filtered: DigimonCard[] = [];
-  searchQuery = '';
-  isGridMode = true;
+  filteredFavorites: DigimonCard[] = [];
+  searchQuery: string = '';
+  isGridMode: boolean = true;
 
   constructor(
-    private favService: FavoritesService,
-    private settings: SettingsService
+    private favoritesService: FavoritesService,
+    private settingsService: SettingsService,
+    private router: Router
   ) {}
 
-  async ngOnInit() {
-    this.isGridMode = await this.settings.isGridMode();
-    this.favorites = await this.favService.getFavorites();
-    this.filtered = [...this.favorites];
+  ngOnInit() {
+    this.favoritesService.getFavorites().subscribe(favorites => {
+      this.favorites = favorites;
+      this.filteredFavorites = favorites;
+    });
+    this.settingsService.getIsGridMode().subscribe(gridMode => (this.isGridMode = gridMode));
   }
 
-  onSearchChange() {
-    const query = this.searchQuery.toLowerCase();
-    this.filtered = this.favorites.filter(
-      (card) =>
-        card.name.toLowerCase().includes(query) ||
-        card.cardnumber.toLowerCase().includes(query)
+  onSearch(event: any) {
+    this.searchQuery = event.target.value;
+    this.filteredFavorites = this.favorites.filter(card =>
+      card.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      card.cardnumber.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
   }
 
-  getImage(card: DigimonCard): string {
-    return card.image_url || `https://images.digimoncard.io/images/cards/${card.cardnumber}.jpg`;
+  goToCardDetail(card: DigimonCard) {
+    this.router.navigate(['card-detail', card.cardnumber]);
   }
 }

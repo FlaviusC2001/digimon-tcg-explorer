@@ -1,74 +1,23 @@
-/* Ionic Variables and Theming. For more info, please see: http://ionicframework.com/docs/theming/ */
+@font-face {
+  font-family: 'DigimonFont';
+  src: url('../assets/fonts/digimon_font.ttf') format('truetype');
+}
+
 :root {
-  --ion-color-primary: #6200ee;
-  --ion-color-primary-rgb: 98, 0, 238;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #5600d1;
-  --ion-color-primary-tint: #751aff;
-
-  --ion-color-secondary: #03dac6;
-  --ion-color-secondary-rgb: 3, 218, 198;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #03c0ae;
-  --ion-color-secondary-tint: #1ce0cb;
-
+  --ion-font-family: 'DigimonFont', sans-serif;
   --ion-background-color: #ffffff;
-  --ion-background-color-rgb: 255, 255, 255;
   --ion-text-color: #000000;
-  --ion-text-color-rgb: 0, 0, 0;
-
-  --ion-card-background: #ffffff;
-  --ion-card-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --ion-card-border-radius: 12px;
-
-  --ion-toolbar-background: var(--ion-color-primary);
-  --ion-toolbar-color: var(--ion-color-primary-contrast);
+  --ion-card-background: rgba(208, 188, 255, 0.1); // Purple80 cu alpha
+  --ion-card-elevation: 4px;
 }
 
-:root[data-theme='dark'] {
-  --ion-color-primary: #bb86fc;
-  --ion-color-primary-rgb: 187, 134, 252;
-  --ion-color-primary-contrast: #000000;
-  --ion-color-primary-contrast-rgb: 0, 0, 0;
-  --ion-color-primary-shade: #a576dd;
-  --ion-color-primary-tint: #c395fc;
-
-  --ion-color-secondary: #03dac6;
-  --ion-color-secondary-rgb: 3, 218, 198;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #03c0ae;
-  --ion-color-secondary-tint: #1ce0cb;
-
+.dark {
   --ion-background-color: #121212;
-  --ion-background-color-rgb: 18, 18, 18;
   --ion-text-color: #ffffff;
-  --ion-text-color-rgb: 255, 255, 255;
-
-  --ion-card-background: #1e1e1e;
-  --ion-card-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  --ion-card-border-radius: 12px;
-
-  --ion-toolbar-background: var(--ion-color-primary);
-  --ion-toolbar-color: var(--ion-color-primary-contrast);
+  --ion-card-background: rgba(102, 80, 164, 0.1); // Purple40 cu alpha
 }
 
-/* Global styles */
 ion-card {
   background: var(--ion-card-background);
-  box-shadow: var(--ion-card-box-shadow);
-  border-radius: var(--ion-card-border-radius);
-  margin: 8px;
-}
-
-ion-button {
-  --border-radius: 8px;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-ion-searchbar {
-  --border-radius: 8px;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 var(--ion-card-elevation) 8px rgba(0, 0, 0, 0.2);
 }

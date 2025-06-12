@@ -1,36 +1,49 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class SettingsService {
-  private readonly darkKey = 'dark_mode';
-  private readonly gridKey = 'grid_mode';
-  private _storage: Storage | null = null;
+  private isDarkMode = new BehaviorSubject<boolean>(false);
+  private isGridMode = new BehaviorSubject<boolean>(true);
 
   constructor(private storage: Storage) {
     this.init();
   }
 
   async init() {
-    const storage = await this.storage.create();
-    this._storage = storage;
+    await this.storage.create();
+    const darkMode = (await this.storage.get('darkMode')) || false;
+    const gridMode = (await this.storage.get('gridMode')) || true;
+    this.isDarkMode.next(darkMode);
+    this.isGridMode.next(gridMode);
+    this.applyTheme(darkMode);
   }
 
-  async isDarkMode(): Promise<boolean> {
-    return (await this._storage?.get(this.darkKey)) ?? false;
+  getIsDarkMode() {
+    return this.isDarkMode.asObservable();
   }
 
-  async isGridMode(): Promise<boolean> {
-    return (await this._storage?.get(this.gridKey)) ?? true;
+  getIsGridMode() {
+    return this.isGridMode.asObservable();
   }
 
-  async toggleDarkMode(): Promise<void> {
-    const current = await this.isDarkMode();
-    await this._storage?.set(this.darkKey, !current);
+  async toggleDarkMode() {
+    const newValue = !this.isDarkMode.value;
+    this.isDarkMode.next(newValue);
+    await this.storage.set('darkMode', newValue);
+    this.applyTheme(newValue);
   }
 
-  async toggleGridMode(): Promise<void> {
-    const current = await this.isGridMode();
-    await this._storage?.set(this.gridKey, !current);
+  async toggleGridMode() {
+    const newValue = !this.isGridMode.value;
+    this.isGridMode.next(newValue);
+    await this.storage.set('gridMode', newValue);
+  }
+
+  private applyTheme(isDark: boolean) {
+    document.body.classList.toggle('dark', isDark);
   }
 }

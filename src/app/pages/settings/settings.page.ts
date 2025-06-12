@@ -1,40 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { SettingsService } from 'src/app/services/settings.services.ts';
+import { SettingsService } from '../../services/settings.service.ts';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  styleUrls: ['./settings.page.scss']
 })
 export class SettingsPage implements OnInit {
-  darkMode = false;
-  gridMode = true;
+  isDarkMode: boolean = false;
+  isGridMode: boolean = true;
 
-  constructor(private settings: SettingsService) {}
+  constructor(private settingsService: SettingsService) {}
 
-  async ngOnInit() {
-    this.darkMode = await this.settings.isDarkMode();
-    this.gridMode = await this.settings.isGridMode();
-    this.applyTheme();
+  ngOnInit() {
+    this.settingsService.getIsDarkMode().subscribe(darkMode => (this.isDarkMode = darkMode));
+    this.settingsService.getIsGridMode().subscribe(gridMode => (this.isGridMode = gridMode));
   }
 
-  async toggleDark() {
-    await this.settings.toggleDarkMode();
-    this.darkMode = !this.darkMode;
-    this.applyTheme();
+  toggleDarkMode() {
+    this.settingsService.toggleDarkMode();
   }
 
-  async toggleGrid() {
-    await this.settings.toggleGridMode();
-    this.gridMode = !this.gridMode;
-  }
-
-  private applyTheme() {
-    document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
+  toggleGridMode() {
+    this.settingsService.toggleGridMode();
   }
 }

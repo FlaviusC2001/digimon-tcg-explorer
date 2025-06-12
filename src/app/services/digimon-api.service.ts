@@ -1,52 +1,45 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Storage } from '@ionic/storage-angular';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { DigimonCard } from '../models/digimon-card.model.ts';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class DigimonApiService {
-  private readonly baseUrl = 'https://digimoncard.io/api-public/';
-  private readonly cacheKey = 'digimon_cards';
-  constructor(
-    private http: HttpClient,
-    private storage: Storage) {
-      this.initStorage();
-  }
+  private readonly BASE_URL = 'https://digimoncard.io/api-public/';
 
-  async initStorage() {
-    await this.storage.create();
-  }
+  constructor(private http: HttpClient) {}
 
   getAllCards(): Observable<DigimonCard[]> {
-    return new Observable((observer: { next: (value: DigimonCard[]) => void; complete: () => void; error: (err: any) => void; }) => {
-      this.storage?.get(this.cacheKey).then((cachedData) => {
-        if (cachedData) {
-          observer.next(cachedData);
+    return this.http
+      .get<DigimonCard[]>(`${this.BASE_URL}getAllCards.php`, {
+        params: {
+          sort: 'name',
+          series: 'Digimon Card Game',
+          sortdirection: 'asc'
         }
-        const params = new HttpParams()
-          .set('sort', 'name')
-          .set('series', 'Digimon Card Game')
-          .set('sortdirection', 'asc');
-
-        this.http
-          .get<DigimonCard[]>(`${this.baseUrl}getAllCards.php`, { params })
-          .subscribe({
-            next: (data) => {
-              this.storage?.set(this.cacheKey, data); // Salvează în cache
-              if (!cachedData) {
-                observer.next(data);
-              }
-              observer.complete();
-            },
-            error: (err) => observer.error(err)
-          });
-      });
-    });
+      })
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching cards:', error);
+          return throwError(() => new Error('Failed to fetch cards'));
+        })
+      );
   }
 
-  getCardDetails(cardNumber: string): Observable<DigimonCard[]> {
-    const params = new HttpParams().set('card', cardNumber);
-    return this.http.get<DigimonCard[]>(`${this.baseUrl}search.php`, { params });
+  getCardDetails(cardNumber: string): Observable<DigimonCard> {
+    return this.http
+      .get<DigimonCard[]>(`${this.BASE_URL}search.php`, {
+        params: { card: cardNumber }
+      })
+      .pipe(
+        map(response => response[0]),
+        catchError(error => {
+          console.error('Error fetching card details:', error);
+          return throwError(() => new Error('Failed to fetch card details'));
+        })
+      );
   }
 }

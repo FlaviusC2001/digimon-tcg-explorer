@@ -1,0 +1,13 @@
+{
+  "name": "digimon-tcg-explorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://digimoncard.io/api-public"
+    }
+  ]
+}
