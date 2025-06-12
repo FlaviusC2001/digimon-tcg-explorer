@@ -8,7 +8,7 @@ import { DigimonCard } from '../models/digimon-card.model.ts';
   providedIn: 'root'
 })
 export class DigimonApiService {
-  private readonly BASE_URL = 'https://digimoncard.io/api-public/';
+  private readonly BASE_URL = '/api/'; // Proxy pentru a evita CORS
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +22,7 @@ export class DigimonApiService {
         }
       })
       .pipe(
-        catchError(error => {
+        catchError((error: any) => {
           console.error('Error fetching cards:', error);
           return throwError(() => new Error('Failed to fetch cards'));
         })
@@ -35,8 +35,8 @@ export class DigimonApiService {
         params: { card: cardNumber }
       })
       .pipe(
-        map(response => response[0]),
-        catchError(error => {
+        map((response: any[]) => response[0]),
+        catchError((error: any) => {
           console.error('Error fetching card details:', error);
           return throwError(() => new Error('Failed to fetch card details'));
         })

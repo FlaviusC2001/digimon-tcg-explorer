@@ -1,0 +1,12 @@
+.card-item {
+  cursor: pointer;
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.card-image {
+  height: 150px;
+  object-fit: contain;
+}

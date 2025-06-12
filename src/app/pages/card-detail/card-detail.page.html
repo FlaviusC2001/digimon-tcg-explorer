@@ -49,7 +49,7 @@
       <ion-card-header>Evo Cost</ion-card-header>
       <ion-card-content>{{ card.evocost }}</ion-card-content>
     </ion-card>
-    <ion-button expand="block" (click)="toggletoggleFavoriteFavorite()">{{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}</ion-button>
+    <ion-button expand="block" (click)="toggleFavorite()">{{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}</ion-button>
   </div>
   <div *ngIf="isImagePreviewOpen" class="image-preview" (click)="closeImagePreview()">
     <ion-img

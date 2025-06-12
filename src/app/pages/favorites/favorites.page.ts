@@ -23,11 +23,11 @@ export class FavoritesPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.favoritesService.getFavorites().subscribe(favorites => {
+    this.favoritesService.getFavorites().subscribe((favorites: DigimonCard[]) => {
       this.favorites = favorites;
       this.filteredFavorites = favorites;
     });
-    this.settingsService.getIsGridMode().subscribe(gridMode => (this.isGridMode = gridMode));
+    this.settingsService.getIsGridMode().subscribe((gridMode: boolean) => (this.isGridMode = gridMode));
   }
 
   onSearch(event: any) {

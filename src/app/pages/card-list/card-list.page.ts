@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DigimonApiService } from '../../services/digimon-api.service.ts';
 import { SettingsService } from '../../services/settings.service.ts';
 import { DigimonCard } from '../../models/digimon-card.model.ts';
-import { IonHeader, IonRow } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-card-list',
@@ -26,7 +26,7 @@ export class CardListPage implements OnInit {
 
   ngOnInit() {
     this.loadCards();
-    this.settingsService.getIsGridMode().subscribe(gridMode => (this.isGridMode = gridMode));
+    this.settingsService.getIsGridMode().subscribe((gridMode: boolean) => (this.isGridMode = gridMode));
   }
 
   async loadCards() {

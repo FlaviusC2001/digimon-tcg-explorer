@@ -4,12 +4,12 @@ import { DigimonApiService } from '../../services/digimon-api.service.ts';
 import { FavoritesService } from '../../services/favorites.service.ts';
 import { DigimonCard } from '../../models/digimon-card.model.ts';
 import { first } from 'rxjs/operators';
-import { IonHeader, IonToolbar, IonTitle, IonButtons } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-card-detail',
   templateUrl: './card-detail.page.html',
-  styleUrls: ['./card-detail.page.scss']
+  styleUrls: ['./card-detail.page.scss'] // Corectat path-ul
 })
 export class CardDetailPage implements OnInit {
   card: DigimonCard | null = null;
@@ -34,7 +34,7 @@ export class CardDetailPage implements OnInit {
   async loadCard(cardNumber: string) {
     this.loading = true;
     try {
-      this.card = await this.digimonApi.getCardDetails(cardNumber);
+      this.card = await this.digimonApi.getCardDetails(cardNumber).toPromise();
       this.isFavorite = await this.favoritesService.isFavorite(cardNumber);
     } catch (error) {
       this.error = 'Failed to load card';
@@ -51,7 +51,7 @@ export class CardDetailPage implements OnInit {
     }
   }
 
-  async toggletoggleFavoriteFavorite() {
+  async toggleFavorite() {
     if (this.card) {
       if (this.isFavorite) {
         await this.favoritesService.removeFromFavorites(this.card);

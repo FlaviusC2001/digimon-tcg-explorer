@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../../services/settings.service.ts';
+import { IonHeader } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-settings',
@@ -13,8 +14,8 @@ export class SettingsPage implements OnInit {
   constructor(private settingsService: SettingsService) {}
 
   ngOnInit() {
-    this.settingsService.getIsDarkMode().subscribe(darkMode => (this.isDarkMode = darkMode));
-    this.settingsService.getIsGridMode().subscribe(gridMode => (this.isGridMode = gridMode));
+    this.settingsService.getIsDarkMode().subscribe((darkMode: boolean) => (this.isDarkMode = darkMode));
+    this.settingsService.getIsGridMode().subscribe((gridMode: boolean) => (this.isGridMode = gridMode));
   }
 
   toggleDarkMode() {

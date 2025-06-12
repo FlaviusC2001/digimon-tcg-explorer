@@ -1,0 +1,12 @@
+<ion-card class="card-item">
+  <ion-img
+    [src]="card.image_url || ('https://images.digimoncard.io/images/cards/' + card.cardnumber + '.jpg')"
+    class="card-image"
+  ></ion-img>
+  <ion-card-header>
+    <ion-card-title>{{ card.name }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>{{ card.cardnumber }}</p>
+  </ion-card-content>
+</ion-card>
